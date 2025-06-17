@@ -1,0 +1,46 @@
+(() => {
+  const subtle = crypto.subtle;
+
+  const toHex = buffer =>
+    [...new Uint8Array(buffer)]
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+
+  const toBase64 = buffer =>
+    btoa(String.fromCharCode(...new Uint8Array(buffer)));
+
+  const exportKey = async (key, label = '') => {
+    try {
+      const raw = await subtle.exportKey('raw', key);
+      console.log(`\n🔓 ${label}Extracted AES-GCM Key:`);
+      console.log('  🔢 Hex     :', toHex(raw));
+      console.log('  📦 Base64 :', toBase64(raw));
+    } catch (e) {
+      console.warn('❌ Failed to export key:', e);
+    }
+  };
+
+  // 🎣 Hook importKey
+  const originalImportKey = subtle.importKey;
+  subtle.importKey = function(format, keyData, algorithm, extractable, usages) {
+    return originalImportKey.apply(this, arguments).then(key => {
+      if (algorithm?.name === 'AES-GCM' && algorithm.length === 256 && extractable) {
+        exportKey(key, 'Imported ');
+      }
+      return key;
+    });
+  };
+
+  // 🎣 Hook generateKey
+  const originalGenerateKey = subtle.generateKey;
+  subtle.generateKey = function(algorithm, extractable, usages) {
+    return originalGenerateKey.apply(this, arguments).then(key => {
+      if (algorithm?.name === 'AES-GCM' && algorithm.length === 256 && extractable) {
+        exportKey(key, 'Generated ');
+      }
+      return key;
+    });
+  };
+
+  console.log('🔌 Crypto.subtle AES-GCM key export hook installed');
+})();
