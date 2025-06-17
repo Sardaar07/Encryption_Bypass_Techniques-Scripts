@@ -15,5 +15,6 @@ A curated collection of **JavaScript and Python scripts** designed to analyze, r
 - ⚙️ Real-world examples inspired by CTFs, red teaming, and bug bounty scenarios
 
 ---
-
+⚠️ **Disclaimer**
+This repository is intended for educational and ethical research purposes only. Use responsibly and only on systems you have explicit permission to test.
 
