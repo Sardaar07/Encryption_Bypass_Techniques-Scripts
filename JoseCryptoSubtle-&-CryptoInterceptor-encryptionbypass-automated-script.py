@@ -130,7 +130,7 @@ def main():
     print("3 - Encrypt with extracted AES key from JS console")
     choice = input("Enter 1, 2, or 3: ").strip()
 
-    public_key_base64 = "**INSERT_PUBLIC_KEY_VALUE FROM BROWSER CONSOLE OR RESPONSE FROM SERVER**"
+    public_key_base64 = "INSERT_PUBLIC_KEY_VALUE FROM BROWSER CONSOLE OR RESPONSE FROM SERVER"
 
     if choice == "1":
         encryption_mode(public_key_base64)
